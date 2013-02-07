@@ -7,7 +7,6 @@ describe UploadStore::File do
   let(:decorated) { double(:file, destroy: true, body: 'body', key: 'key.ext') }
   let(:file) { UploadStore::File.new(decorated) }
 
-
   it 'splits name parts to preserve the file extension' do
     expect(file.name_parts).to eql(['key', '.ext'])
   end
@@ -29,12 +28,12 @@ describe UploadStore::File do
     # This is a lot of work to set up but its very worth it to ensure that
     # this core processing logic is functioning as expected.
 
-    temp_directory = File.expand_path('../tmp', __FILE__)
+    tmp_directory = File.expand_path('../../../tmp', __FILE__)
 
     connection = Fog::Storage.new({
       provider:   'Local',
-      local_root: temp_directory,
-      endpoint:   temp_directory
+      local_root: tmp_directory,
+      endpoint:   tmp_directory
     })
 
     directory = connection.directories.create(key: 'fog-test')
