@@ -1,4 +1,4 @@
-# Upload::Store
+# UploadStore
 
 Rails is terrible at streaming uploaded files. So, move that upload handling to what ever file store your already using and rely on ruby to handle the processing.
 
@@ -17,6 +17,33 @@ Or install it yourself as:
     $ gem install upload-store
 
 ## Usage
+
+Configuration
+
+```ruby
+require 'upload_store'
+
+if %w(staging production).include?(Rails.env)
+  UploadStore.configure do |config|
+    config.fog_credentials = {
+      provider:              'AWS',
+      aws_access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+    }
+    config.fog_directory   = 'my_bucket_name'
+  end
+else
+  UploadStore.configure do |config|
+    config.fog_directory    = 'uploads'
+    config.fog_credentials  = {
+      provider:   'Local',
+      local_root: Rails.root.join('tmp')
+    }
+  end
+end
+```
+
+Usage
 
 ```ruby
 UploadStore.get('file_name.jpg').process do |file|
