@@ -2,6 +2,7 @@ require 'upload_store/version'
 require 'active_support/core_ext/module/delegation'
 require 'fog'
 require 'singleton'
+require 'upload_store/file'
 
 # Public: Uploads are all two stage. First files are uploaded from the client
 # to the uploads directory where they are staged until they are processed
