@@ -1,45 +1,30 @@
 require 'securerandom'
 require 'active_support/json'
-require 'active_support/core_ext/numeric/time'
-require 'active_support/core_ext/numeric/bytes'
 require 'active_support/core_ext/object/to_json'
 
-class UploadStore
+module UploadStore
   module Policy
     class AWS
-      attr_reader :expiration, :path, :max_file_size
+      include Configurable
 
-      class << self
-        CONFIG_KEYS = [:access_key_id, :secret_access_key, :bucket]
-
-        attr_accessor *CONFIG_KEYS
-
-        def configure
-          yield self
-        end
-
-        def assert_config!
-          CONFIG_KEYS.each do |config|
-            raise ArgumentError, "Missing configuration '#{config}'" unless self.send(config)
-          end
-        end
-      end
+      attr_reader :expiration, :path, :max_file_size, :bucket, :access_key_id, :secret_access_key
 
       def initialize(opts={})
-        @path           = opts.fetch(:path)
-        @expiration     = opts.fetch(:expiration)
-        @max_file_size  = opts.fetch(:max_file_size)
+        @access_key_id      = fetch_config(:access_key_id, opts)
+        @secret_access_key  = fetch_config(:secret_access_key, opts)
+        @bucket             = fetch_config(:bucket, opts)
+        @path               = fetch_config(:path, opts)
+        @expiration         = fetch_config(:expiration, opts)
+        @max_file_size      = fetch_config(:max_file_size, opts)
       end
 
       def fields
-        self.class.assert_config!
-
         {
           key:            key,
           acl:            acl,
           policy:         policy,
           signature:      signature,
-          AWSAccessKeyId: self.class.access_key_id
+          AWSAccessKeyId: access_key_id
         }
       end
 
@@ -71,7 +56,7 @@ class UploadStore
           conditions: [
             ['starts-with', '$key', 'uploads/'],
             ['content-length-range', 0, max_file_size],
-            {bucket: self.class.bucket},
+            {bucket: bucket},
             {acl: acl}
           ]
         }
@@ -81,9 +66,15 @@ class UploadStore
         Base64.encode64(
           OpenSSL::HMAC.digest(
             OpenSSL::Digest::Digest.new('sha1'),
-            self.class.secret_access_key, policy
+            secret_access_key, policy
           )
         ).gsub("\n", "")
+      end
+
+      private
+
+      def fetch_config(*args)
+        self.class.fetch_config(*args)
       end
     end
   end

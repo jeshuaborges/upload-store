@@ -1,10 +1,10 @@
 require 'upload_store/policy/local'
 require 'upload_store/policy/aws'
 
-class UploadStore
+module UploadStore
   module Policy
-    def self.retrieve
-      const_get UploadStore.provider
+    def self.retrieve(provider_name)
+      const_get provider_name
     end
   end
 end
