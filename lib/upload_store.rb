@@ -24,10 +24,6 @@ class UploadStore
     yield self
   end
 
-  def AWS?
-    provider == 'AWS'
-  end
-
   def provider
     fog_credentials[:provider]
   end
