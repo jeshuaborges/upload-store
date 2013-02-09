@@ -12,7 +12,7 @@ module UploadStore
       def initialize(opts={})
         @access_key_id      = fetch_config(:access_key_id, opts)
         @secret_access_key  = fetch_config(:secret_access_key, opts)
-        @bucket             = fetch_config(:bucket, opts)
+        @directory          = fetch_config(:directory, opts)
         @path               = fetch_config(:path, opts)
         @expiration         = fetch_config(:expiration, opts)
         @max_file_size      = fetch_config(:max_file_size, opts)

@@ -6,7 +6,7 @@ describe UploadStore::Policy::AWS do
     UploadStore::Policy::AWS.new(
       access_key_id:      'AWS_ACCESS_KEY_ID',
       secret_access_key:  'AWS_SECRET_ACCESS_KEY',
-      bucket:             'UPLOAD_STORE_S3_BUCKET',
+      directory:          'UPLOAD_STORE_S3_BUCKET',
       path:               'directory-for-files',
       expiration:         Time.local(2015),
       max_file_size:      100_000_000

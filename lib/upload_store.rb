@@ -1,5 +1,4 @@
 require 'upload_store/version'
-require 'active_support/core_ext/module/delegation'
 require 'fog'
 require 'upload_store/configuration'
 require 'upload_store/configurable'
