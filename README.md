@@ -25,20 +25,23 @@ require 'upload_store'
 
 if %w(staging production).include?(Rails.env)
   UploadStore.configure do |config|
-    config.fog_credentials = {
-      provider:              'AWS',
-      aws_access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
-      aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    }
-    config.fog_directory   = 'my_bucket_name'
+    config.provider   = 'AWS'
+    config.directory  = 'my-bucket-name'
+    config.path       = 'directory-for-everyone'
+
+    # AWS configs
+    access_key_id:    = ENV['AWS_ACCESS_KEY_ID']
+    secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
   end
 else
   UploadStore.configure do |config|
-    config.fog_directory    = 'uploads'
-    config.fog_credentials  = {
-      provider:   'Local',
-      local_root: Rails.root.join('tmp')
-    }
+    config.provider   = 'Local'
+    config.directory  = 'upload-store-unit-tests'
+    config.path       = 'directory-for-everyone'
+
+    # Local configs
+    config.local_root = Rails.root.join('tmp')
+    config.url        = 'http://localhost:3000/uploads'
   end
 end
 ```
@@ -47,7 +50,8 @@ Usage
 
 ```ruby
 UploadStore.get('file_name.jpg').process do |file|
-  # anything you want with a local file here
+  # Anything you want with a local file here.
+  # Example: User.avatar.store!(file)
 end
 ```
 

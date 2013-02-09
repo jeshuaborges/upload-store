@@ -1,6 +1,6 @@
 require 'tempfile'
 
-class UploadStore
+module UploadStore
   class File
     attr_reader :file
 

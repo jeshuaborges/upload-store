@@ -1,11 +1,13 @@
-class UploadStore
+module UploadStore
   module Policy
     class Local
+      include Configurable
+
       attr_reader :path, :url
 
       def initialize(opts={})
-        @path = opts.fetch(:path)
-        @url  = opts.fetch(:url)
+        @path = self.class.fetch_config(:path, opts)
+        @url  = self.class.fetch_config(:url, opts)
       end
 
       def fields

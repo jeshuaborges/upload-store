@@ -1,17 +1,19 @@
 require_relative 'support/spec_helper'
 require 'upload_store'
 
+# Unit tests
 describe UploadStore do
-  subject { UploadStore.send(:new) }
-
-  it 'accepts configuration' do
+  before do
     subject.configure do |config|
-      config.fog_credentials = {}
-      config.fog_directory = 'something'
+      config.provider   = 'Local'
+      config.local_root = File.expand_path('../../tmp', __FILE__)
+      config.directory  = 'upload-store-unit-tests'
+      config.path       = 'directory-for-everyone'
+      config.url        = 'http://localhost:3000/uploads'
     end
   end
 
-  it 'creates a fog storage' do
+  it 'creates a connection' do
     fog_storage = double('fog_storage')
     stub_const('Fog::Storage', fog_storage)
     fog_storage.should_receive(:new)
@@ -29,5 +31,9 @@ describe UploadStore do
     subject.stub(:get_directory) { nil }
     subject.should_receive(:create_directory)
     subject.directory
+  end
+
+  it 'creates a policy' do
+    expect(subject.policy).to be_a(UploadStore::Policy::Local)
   end
 end

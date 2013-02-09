@@ -37,9 +37,9 @@ module UploadStoreHelper
 
   def upload_policy
     UploadStore::Policy.retrieve.new(
-      path:           "uploads/#{SecureRandom.hex(4)}",
-      max_file_size:  100.megabytes,
-      expiration:     10.hours.from_now
+      path:           "uploads/#{current_user.id}",
+      max_file_size:  10.megabytes,
+      expiration:     1.hour.from_now
     )
   end
 

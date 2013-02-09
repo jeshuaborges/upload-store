@@ -1,4 +1,4 @@
-class UploadStore
+module UploadStore
   class PolicySerializer
     attr_reader :policy
 
