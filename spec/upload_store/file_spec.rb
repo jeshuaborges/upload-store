@@ -39,7 +39,7 @@ describe UploadStore::File do
     directory = connection.directories.create(key: 'fog-test')
 
     @fog_file = directory.files.create(
-      :key    => 'world-bar.jpeg',
+      :key    => 'jpeg.jpeg',
       :body   => File.open(File.expand_path('./spec/fixtures/jpeg.jpeg')),
       :public => true
     )
