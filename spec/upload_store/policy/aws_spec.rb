@@ -7,7 +7,7 @@ describe UploadStore::Policy::AWS do
       access_key_id:      'AWS_ACCESS_KEY_ID',
       secret_access_key:  'AWS_SECRET_ACCESS_KEY',
       directory:          'UPLOAD_STORE_S3_BUCKET',
-      path:               'directory-for-files',
+      path:               '',
       expiration:         Time.local(2015),
       max_file_size:      100_000_000
     )
@@ -15,5 +15,9 @@ describe UploadStore::Policy::AWS do
 
   it 'returns all fields required for an aws s3 form policy' do
     expect(subject.fields.keys).to include(:key, :acl, :policy, :signature, :AWSAccessKeyId)
+  end
+
+  it 'constructs a url' do
+    expect{subject.url}.to_not raise_error
   end
 end

@@ -7,7 +7,7 @@ module UploadStore
     class AWS
       include Configurable
 
-      attr_reader :expiration, :path, :max_file_size, :bucket, :access_key_id, :secret_access_key
+      attr_reader :expiration, :path, :max_file_size, :directory, :access_key_id, :secret_access_key
 
       def initialize(opts={})
         @access_key_id      = fetch_config(:access_key_id, opts)
@@ -21,19 +21,21 @@ module UploadStore
       def fields
         {
           key:            key,
+          AWSAccessKeyId: access_key_id,
           acl:            acl,
           policy:         policy,
-          signature:      signature,
-          AWSAccessKeyId: access_key_id
+          signature:      signature
         }
       end
+
+      def bucket; directory; end
 
       def provider
         'AWS'
       end
 
       def url
-        "https://#{self.class.bucket}.s3.amazonaws.com/"
+        "https://#{bucket}.s3.amazonaws.com/"
       end
 
       protected
@@ -47,14 +49,14 @@ module UploadStore
       end
 
       def policy
-        Base64.encode64(policy_data.to_json).gsub("\n", "")
+        @policy ||= Base64.encode64(policy_data.to_json).gsub("\n", "")
       end
 
       def policy_data
         {
           expiration: expiration,
           conditions: [
-            ['starts-with', '$key', 'uploads/'],
+            ['starts-with', '$key', "#{path}/"],
             ['content-length-range', 0, max_file_size],
             {bucket: bucket},
             {acl: acl}
