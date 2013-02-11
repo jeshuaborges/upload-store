@@ -14,9 +14,9 @@ module UploadStore
 
     def required_keys
       {
-        'upload-policy-provider'=> provider,
-        'upload-policy-url'     => policy.url,
-        'upload-policy-path'    => policy.path
+        'upload-policy-provider'    => provider,
+        'upload-policy-url'         => policy.url,
+        'upload-policy-field-path'  => policy.path
       }
     end
 
