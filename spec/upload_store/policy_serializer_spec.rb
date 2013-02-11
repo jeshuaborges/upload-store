@@ -16,8 +16,7 @@ describe UploadStore::PolicySerializer do
   it 'serializes all required fields' do
     expect(subject.to_hash).to include({
       'upload-policy-provider'  => 'MyPolicy',
-      'upload-policy-url'       => 'http://localhost/uploads',
-      'upload-policy-path'      => 'user123'
+      'upload-policy-url'       => 'http://localhost/uploads'
     })
   end
 
