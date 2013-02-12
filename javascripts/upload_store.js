@@ -5,7 +5,7 @@
     var meta = function(name) {
       var value = $('[name="'+ name +'"]').attr('content');
 
-      if( !value ) {
+      if( typeof value === undefined ) {
         throw 'Required meta key not defined. Make sure to set <meta name="'+ name +'" content="anything">.';
       }
 
