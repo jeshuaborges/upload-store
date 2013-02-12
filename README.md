@@ -16,9 +16,7 @@ Or install it yourself as:
 
     $ gem install upload-store
 
-## Usage
-
-Configuration
+## Config
 
 ```ruby
 require 'upload_store'
@@ -46,7 +44,20 @@ else
 end
 ```
 
-Usage
+### Rails load javascript
+
+In `application.rb`
+
+```ruby
+config.assets.paths.append Gem::Specification.find_by_name('upload-store').gem_dir + '/javascripts'
+```
+
+Add to `application.js`
+```javascript
+//= require upload_store
+```
+
+## Usage
 
 ```ruby
 UploadStore.get('file_name.jpg').process do |file|
