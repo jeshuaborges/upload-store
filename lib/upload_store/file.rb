@@ -29,7 +29,11 @@ module UploadStore
       parts = file.key.split('/').last.split('.')
 
       # Re-introduce the '.' for the file extension
-      parts << ".#{parts.pop}"
+      if parts.length > 1
+        parts << ".#{parts.pop}"
+      else
+        parts.first
+      end
     end
 
     def tempfile
