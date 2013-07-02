@@ -1,4 +1,6 @@
 (function($) {
+  var currentId = 0;
+
   UploadStore = function() {
     var req = new XMLHttpRequest();
 
@@ -42,13 +44,16 @@
         // better to be able to pull this out of the post somehow. Re-using
         // an UploadStore object would cause an exception when executions
         // overlap.
-        _m.filename  = data.file.name;
+        _m.filename = currentId++ +'/'+ data.file.name;
+        // _m.filename  = data.file.name;
 
         _m.form = new FormData();
 
         // Attach meta fields.
         $.each(_m.metaFields, function(i, field) {
-          _m.form.append(field[0], field[1]);
+          // `${filename}` is a magical value always replaced with the current
+          // file name.
+          _m.form.append(field[0], field[1].replace("${filename}",_m.filename));
         });
 
         // Attach passed data fields.

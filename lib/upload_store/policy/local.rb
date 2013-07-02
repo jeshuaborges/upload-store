@@ -11,7 +11,7 @@ module UploadStore
       end
 
       def fields
-        {}
+        {key: '${filename}'}
       end
     end
   end
