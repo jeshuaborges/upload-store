@@ -26,14 +26,8 @@ module UploadStore
     end
 
     def name_parts
-      parts = file.key.split('/').last.split('.')
-
-      # Re-introduce the '.' for the file extension
-      if parts.length > 1
-        parts << ".#{parts.pop}"
-      else
-        parts.first
-      end
+      prefix, split, suffix = file.key.split('/').last.rpartition('.')
+      split == '.' ? [prefix, split << suffix] : suffix
     end
 
     def tempfile
