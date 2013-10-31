@@ -26,8 +26,15 @@ module UploadStore
     end
 
     def name_parts
-      prefix, split, suffix = file.key.split('/').last.rpartition('.')
-      split == '.' ? [prefix, split << suffix] : suffix
+      full_name = file.key.split('/').last
+
+      prefix, split, suffix = full_name.rpartition('.')
+
+      if prefix.empty? # Starts with a dot and/or has no extension.
+        "#{split}#{suffix}"
+      else # Normal filename with an extension.
+        [prefix, "#{split}#{suffix}"]
+      end
     end
 
     def tempfile
