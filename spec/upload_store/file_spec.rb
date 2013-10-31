@@ -4,16 +4,16 @@ require 'upload_store/file'
 
 # Unit tests
 describe UploadStore::File do
-  let(:decorated) { double(:file, destroy: true, body: 'body', key: 'key.ext') }
+  let(:decorated) { double(:file, destroy: true, body: 'body', key: '.key.extra.ext') }
   let(:file) { UploadStore::File.new(decorated) }
 
   it 'returns the same name when there is no extension' do
-    file.stub(file: double(:file, key: 'noext'))
-    file.name_parts.should eq 'noext'
+    file.stub(file: double(:file, key: '.noext'))
+    file.name_parts.should eq '.noext'
   end
 
   it 'splits name parts to preserve the file extension' do
-    expect(file.name_parts).to eql(['key', '.ext'])
+    expect(file.name_parts).to eql(['.key.extra', '.ext'])
   end
 
   it 'process deletes the uploaded file' do

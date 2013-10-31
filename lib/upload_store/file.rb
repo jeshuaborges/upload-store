@@ -26,13 +26,14 @@ module UploadStore
     end
 
     def name_parts
-      parts = file.key.split('/').last.split('.')
+      full_name = file.key.split('/').last
 
-      # Re-introduce the '.' for the file extension
-      if parts.length > 1
-        parts << ".#{parts.pop}"
-      else
-        parts.first
+      prefix, split, suffix = full_name.rpartition('.')
+
+      if prefix.empty? # Starts with a dot and/or has no extension.
+        "#{split}#{suffix}"
+      else # Normal filename with an extension.
+        [prefix, "#{split}#{suffix}"]
       end
     end
 
